@@ -1,18 +1,14 @@
-import html2canvas from 'html2canvas';
+import html2canvas from 'html2canvas-pro';
 import jsPDF from 'jspdf';
 
-// Rasterise each docx-preview page section (one <section class="docx">) into its
-// own PDF page, using the section's own pixel size. This avoids the "one tall
-// image sliced blindly" artefacts of the naive approach.
+// Rasterise each docx-preview page section (one <section class="docx">) into
+// its own PDF page, using the section's actual pixel size. Using html2canvas-pro
+// (MIT) because the original html2canvas has a text-baseline bug that drops
+// highlighted text a few pixels below its background.
 export async function exportDocxPagesToPdf(wrapperEl, filename = 'loi.pdf') {
   const pages = [...wrapperEl.querySelectorAll('section.docx')];
-  if (pages.length === 0) {
-    // Fallback: treat the whole wrapper as one page.
-    return exportNodeToPdf(wrapperEl, filename);
-  }
+  if (pages.length === 0) return exportNodeToPdf(wrapperEl, filename);
 
-  // Use the first page's pixel size to set PDF geometry. docx-preview sizes
-  // sections in px at 96 DPI, so 1 px ≈ 0.75 pt (72 pt / 96 px).
   const PX_TO_PT = 72 / 96;
   const firstRect = pages[0].getBoundingClientRect();
   const pdf = new jsPDF({
@@ -25,10 +21,11 @@ export async function exportDocxPagesToPdf(wrapperEl, filename = 'loi.pdf') {
     const section = pages[i];
     const rect = section.getBoundingClientRect();
     const canvas = await html2canvas(section, {
-      scale: 3,                 // 3x for crisp text
+      scale: 2,
       backgroundColor: '#ffffff',
       useCORS: true,
       logging: false,
+      letterRendering: true,
       windowWidth: rect.width,
       windowHeight: rect.height,
     });
@@ -41,10 +38,10 @@ export async function exportDocxPagesToPdf(wrapperEl, filename = 'loi.pdf') {
   pdf.save(filename);
 }
 
-// Legacy single-image fallback kept for callers that don't have per-page sections.
 export async function exportNodeToPdf(node, filename = 'loi.pdf') {
   const canvas = await html2canvas(node, {
     scale: 2, backgroundColor: '#ffffff', useCORS: true, logging: false,
+    letterRendering: true,
   });
   const pdf = new jsPDF({ unit: 'pt', format: 'letter', orientation: 'portrait' });
   const pageW = pdf.internal.pageSize.getWidth();

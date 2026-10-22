@@ -1,5 +1,7 @@
 import clsx from 'clsx';
+import { useState } from 'react';
 import { useWork } from './WorkContext.jsx';
+import { Chevron } from '../components/ui/index.js';
 
 const DRAFT = {
   key: 'draft',
@@ -12,10 +14,10 @@ const DRAFT = {
     { key: 'edit',     label: 'Underscores and Edit' },
   ],
 };
+
 const BUILD = {
   key: 'build',
   title: 'Build Template',
-  subtitle: 'Manage Templates',
   steps: [
     { key: 'upload',      label: 'Upload Draft Template' },
     { key: 'link-fields', label: 'Link Site Fields' },
@@ -26,85 +28,90 @@ const BUILD = {
 
 export default function Sidebar() {
   const { mode, step, setMode, setStep } = useWork();
+  const [draftOpen, setDraftOpen] = useState(true);
+  const [buildOpen, setBuildOpen] = useState(false);
 
-  function switchTo(m) {
-    setMode(m);
-    setStep((m === 'draft' ? DRAFT : BUILD).steps[0].key);
+  function pickStep(newMode, newStep) {
+    setMode(newMode);
+    setStep(newStep);
   }
 
-  const isDraft = mode === 'draft';
+  const buildHeader = (
+    <SectionHeader
+      section={BUILD}
+      open={buildOpen}
+      onToggle={() => setBuildOpen((v) => !v)}
+      onSubtitle={() => pickStep('build', 'upload')}
+    />
+  );
 
   return (
-    <aside className="relative flex w-[199px] shrink-0 flex-col bg-ap-mid">
-      {/* Draft LOI section */}
+    <aside className="flex w-[199px] shrink-0 flex-col bg-ap-mid">
       <SectionHeader
         section={DRAFT}
-        state={isDraft ? 'active' : 'collapsed-top'}
-        onToggle={() => !isDraft && switchTo('draft')}
+        open={draftOpen}
+        onToggle={() => setDraftOpen((v) => !v)}
+        onSubtitle={() => pickStep('draft', 'manage')}
       />
-      {isDraft && (
-        <StepList steps={DRAFT.steps} current={step} onPick={setStep} />
-      )}
-
-      {isDraft && <div className="flex-1" />}
-
-      {/* Build Template section */}
-      {!isDraft && (
-        <SectionHeader
-          section={BUILD}
-          state="active"
-          onToggle={() => {}}
+      {draftOpen && (
+        <StepList
+          steps={DRAFT.steps}
+          current={mode === 'draft' ? step : null}
+          onPick={(s) => pickStep('draft', s)}
         />
       )}
-      {!isDraft && (
-        <StepList steps={BUILD.steps} current={step} onPick={setStep} />
-      )}
-      {!isDraft && <div className="flex-1" />}
 
-      {isDraft && (
-        <SectionHeader
-          section={BUILD}
-          state="collapsed-bottom"
-          onToggle={() => switchTo('build')}
+      <div className="flex-1" />
+
+      {/* Build Template is temporarily hidden while we finish the Draft LOI module.
+          Keep the code intact; uncomment to bring it back.
+      {buildOpen && buildHeader}
+      {buildOpen && (
+        <StepList
+          steps={BUILD.steps}
+          current={mode === 'build' ? step : null}
+          onPick={(s) => pickStep('build', s)}
         />
       )}
+      {!buildOpen && buildHeader}
+      */}
     </aside>
   );
 }
 
-function SectionHeader({ section, state, onToggle }) {
-  const { setStep } = useWork();
-  const isActive = state === 'active';
-  const isCollapsedBottom = state === 'collapsed-bottom';
-  const chevron = isActive ? <ChevronDown /> : <ChevronLeft />;
-
+function SectionHeader({ section, open, onToggle, onSubtitle }) {
   function handleSubtitle(e) {
     e.stopPropagation();
-    if (isActive) setStep(section.key === 'draft' ? 'manage' : 'upload');
+    onSubtitle?.();
+  }
+
+  if (!open) {
+    return (
+      <button
+        onClick={onToggle}
+        className="flex h-[42px] w-full items-center justify-between bg-ap-dark pl-[23px] pr-[12px] text-left"
+      >
+        <span className="text-[16px] font-bold leading-[16px] text-white">{section.title}</span>
+        <Chevron direction="left" color="white" />
+      </button>
+    );
   }
 
   return (
     <button
       onClick={onToggle}
-      disabled={isActive}
-      className={clsx(
-        'relative block w-full bg-ap-dark px-[23px] text-left',
-        isCollapsedBottom ? 'h-[42px] pt-[12px]' : 'h-[60px] pt-[12px]',
-      )}
+      className="block h-[60px] w-full bg-ap-dark pl-[23px] pr-[12px] pt-[12px] text-left"
     >
-      <div className="text-[16px] font-bold leading-[16px] text-white">{section.title}</div>
-      {!isCollapsedBottom && (
-        <div
-          onClick={handleSubtitle}
-          className={clsx(
-            'mt-[7px] text-[10px] font-bold leading-[12px] text-white',
-            isActive && 'cursor-pointer hover:underline',
-          )}
-        >
-          {section.subtitle}
-        </div>
-      )}
-      <span className="absolute right-[14px] top-[14px]">{chevron}</span>
+      <div className="flex items-center justify-between">
+        <span className="text-[16px] font-bold leading-[16px] text-white">{section.title}</span>
+        <Chevron direction="down" color="white" />
+      </div>
+      <div
+        onClick={handleSubtitle}
+        className="mt-[7px] cursor-pointer text-[10px] font-bold leading-[12px] text-white hover:underline"
+      >
+        {section.subtitle}
+      </div>
     </button>
   );
 }
@@ -129,20 +136,5 @@ function StepList({ steps, current, onPick }) {
         );
       })}
     </ul>
-  );
-}
-
-function ChevronDown() {
-  return (
-    <svg width="12" height="8" viewBox="0 0 12 8" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M1 1l5 5 5-5" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
-  );
-}
-function ChevronLeft() {
-  return (
-    <svg width="8" height="12" viewBox="0 0 8 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M6 1L1 6l5 5" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
   );
 }

@@ -2,7 +2,6 @@ import clsx from 'clsx';
 import { useState } from 'react';
 import StepFooter from '../StepFooter.jsx';
 
-// Matches node 108629-6414 — selected row has dark bar + "Add to LOI >".
 const FIELDS = [
   'LL Broker', 'LL Brokerage', 'LL Broker Email',
   'Street Address', 'City', 'State', 'Size',

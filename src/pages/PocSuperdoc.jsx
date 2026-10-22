@@ -1,10 +1,10 @@
-// Renamed in spirit from SuperDoc POC to docx-preview POC — same file path
-// so routes don't need to change elsewhere.
 import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { renderDocx } from '../lib/docRenderer.js';
 import { fetchTemplate } from '../lib/api/templates.js';
 
+// POC 1 — opens a .docx and renders it in the browser via docx-preview.
+// Output is real HTML (not a canvas image), so it's inspectable and selectable.
 export default function PocSuperdoc() {
   const hostRef = useRef(null);
   const bufferRef = useRef(null);
@@ -49,7 +49,7 @@ export default function PocSuperdoc() {
       <header className="flex items-center justify-between border-b bg-white px-4 py-2">
         <div className="flex items-center gap-3">
           <Link to="/" className="text-sm text-slate-500 hover:underline">← home</Link>
-          <h1 className="text-sm font-semibold text-navy-900">POC 1 — docx-preview render</h1>
+          <h1 className="text-sm font-semibold text-slate-900">POC 1 — Render .docx as HTML</h1>
           <span className="text-xs text-slate-500">
             status: {status}{filename ? ` · ${filename}` : ''}
           </span>
@@ -61,15 +61,15 @@ export default function PocSuperdoc() {
             onChange={(e) => e.target.files?.[0] && openFromFile(e.target.files[0])}
             className="text-xs"
           />
-          <button onClick={openBuiltIn} className="rounded bg-navy-800 px-3 py-1 text-xs text-white hover:bg-navy-700">
+          <button onClick={openBuiltIn} className="rounded bg-slate-800 px-3 py-1 text-xs text-white hover:bg-slate-700">
             Open built-in sample
           </button>
-          <button onClick={downloadOriginal} className="rounded bg-accent px-3 py-1 text-xs text-white hover:opacity-90">
+          <button onClick={downloadOriginal} className="rounded bg-orange-500 px-3 py-1 text-xs text-white hover:bg-orange-600">
             Download .docx
           </button>
         </div>
       </header>
-      <div ref={hostRef} className="doc-host flex-1 overflow-auto" />
+      <div ref={hostRef} className="flex-1 overflow-auto doc-host" />
     </div>
   );
 }

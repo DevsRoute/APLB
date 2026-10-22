@@ -1,6 +1,5 @@
 import { useWork } from '../WorkContext.jsx';
 
-// Thin footer bar: 1px top line + 12px font-bold labels on each side.
 export default function StepFooter({ prev, next, rightLabel }) {
   const { setStep } = useWork();
   return (

@@ -1,5 +1,5 @@
 // Generates /public/templates/sample-loi.docx — a realistic, multi-feature LOI
-// with {placeholders} the POCs can target. Run `npm run make:sample`.
+// with [placeholders] the POCs can target. Run `npm run make:sample`.
 import { writeFileSync, mkdirSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -62,7 +62,7 @@ const doc = new Document({
           width: { size: 100, type: WidthType.PERCENTAGE },
           rows: [
             row(bold('Landlord:'), [new Paragraph({ children: [tag('ll_name')] })]),
-            row(bold('Tenant:'), [new Paragraph({ children: [txt('Dollar Tree Stores, Inc., a VA corporation')] })]),
+            row(bold('Tenant:'), [new Paragraph({ children: [txt('Tenant Corp, Inc., a VA corporation')] })]),
             row(bold('Shopping Center:'), [
               new Paragraph({
                 children: [
@@ -99,7 +99,7 @@ const doc = new Document({
           ],
         }),
         new Paragraph({ children: [txt('Sincerely,')] }),
-        new Paragraph({ children: [txt('Dollar Tree Stores, Inc.')] }),
+        new Paragraph({ children: [txt('Tenant Corp, Inc.')] }),
       ],
     },
   ],

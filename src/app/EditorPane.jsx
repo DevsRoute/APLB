@@ -1,72 +1,53 @@
-import { forwardRef, useEffect, useImperativeHandle, useRef } from 'react';
-import EditorToolbar from '../components/EditorToolbar.jsx';
-import { renderDocx } from '../lib/docRenderer.js';
-import { htmlToDocxBlob } from '../lib/htmlToDocx.js';
-import { exportDocxPagesToPdf } from '../lib/exportPdf.js';
-import { printWrapper } from '../lib/printPdf.js';
+import { forwardRef, useImperativeHandle, useMemo, useRef } from 'react';
+import { DocxEditor } from '@docx-editor.dev/react';
+import { packagedFonts } from '@docx-editor.dev/fonts';
+import '@docx-editor.dev/core/styles/editor.css';
 
-const EditorPane = forwardRef(function EditorPane(
-  { buffer, editable = true, fontFamily, fontSizePx, onFont, onFontSize, onExport, onSend },
-  ref,
-) {
-  const hostRef = useRef(null);
+const DOCX_MIME =
+  'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
+
+const fonts = packagedFonts();
+
+const EditorPane = forwardRef(function EditorPane({ buffer, onExport, onSend }, ref) {
+  const editorRef = useRef(null);
+  const docBytes = useMemo(() => (buffer ? new Uint8Array(buffer) : null), [buffer]);
 
   useImperativeHandle(ref, () => ({
-    getHtml() {
-      const sections = hostRef.current?.querySelectorAll('section.docx') || [];
-      return [...sections].map((s) => s.innerHTML).join('\n');
-    },
-    getWrapper() {
-      return hostRef.current?.querySelector('.docx-wrapper') || hostRef.current;
-    },
     async exportDocx(filename = 'loi.docx') {
-      const html = this.getHtml();
-      if (!html) return;
-      const blob = await htmlToDocxBlob(html);
-      saveBlob(blob, filename);
-    },
-    async exportPdfRaster(filename = 'loi.pdf') {
-      const w = this.getWrapper();
-      if (w) await exportDocxPagesToPdf(w, filename);
-    },
-    printPdf(title = 'LOI') {
-      const w = this.getWrapper();
-      if (w) printWrapper(w, title);
+      const bytes = await editorRef.current?.save();
+      if (!bytes) return;
+      downloadBlob(new Blob([bytes], { type: DOCX_MIME }), filename);
     },
   }));
 
-  useEffect(() => {
-    if (!buffer || !hostRef.current) return;
-    renderDocx(buffer, hostRef.current).then(() => {
-      if (editable) {
-        for (const page of hostRef.current.querySelectorAll('section.docx')) {
-          page.setAttribute('contenteditable', 'true');
-          page.spellcheck = true;
-        }
-      }
-    });
-  }, [buffer, editable]);
-
   return (
-    <div className="flex min-w-0 flex-1 flex-col bg-white">
-      <EditorToolbar
-        fontFamily={fontFamily}
-        fontSizePx={fontSizePx}
-        onFont={onFont}
-        onFontSize={onFontSize}
-        onExport={onExport}
-        onSend={onSend}
-      />
-      <div ref={hostRef} className="doc-host thin-scroll flex-1 overflow-auto" />
-    </div>
+    <section className="flex min-w-0 flex-1 flex-col bg-white">
+      <div className="flex items-center justify-end gap-5 border-b border-black/10 bg-white px-5 py-2 text-[12px] font-bold text-ap-text">
+        <button onClick={onExport} className="hover:underline">Export</button>
+        <button onClick={onSend} className="hover:underline">Send</button>
+      </div>
+      <div className="min-h-0 flex-1">
+        {docBytes && (
+          <DocxEditor
+            ref={editorRef}
+            document={docBytes}
+            mode="edit"
+            fonts={fonts}
+          />
+        )}
+      </div>
+    </section>
   );
 });
 
-function saveBlob(blob, filename) {
+function downloadBlob(blob, name) {
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
-  a.href = url; a.download = filename;
-  document.body.appendChild(a); a.click(); a.remove();
+  a.href = url;
+  a.download = name;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
   setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
 

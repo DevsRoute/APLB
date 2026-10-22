@@ -1,7 +1,6 @@
 import clsx from 'clsx';
 import StepFooter from '../StepFooter.jsx';
 
-// Figma dummy data verbatim.
 const SAVED = [
   { id: 's1', name: 'LOI - WestWood Hills - Los Angeles, CA - Aug 30, 2026 - v1', selected: false },
   { id: 's2', name: 'LOI - Burns Park - Los Angeles, CA - Aug 10, 2026 - v1',     selected: false },

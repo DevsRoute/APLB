@@ -8,8 +8,8 @@ import { fillDocx, blobToArrayBuffer } from '../lib/fillTemplate.js';
 const Ctx = createContext(null);
 
 export function WorkProvider({ children }) {
-  const [mode, setMode] = useState('draft');          // 'draft' | 'build'
-  const [step, setStep] = useState('manage');         // default landing — Manage LOIs
+  const [mode, setMode] = useState('draft');
+  const [step, setStep] = useState('manage');
   const [sites, setSites] = useState([]);
   const [site, setSite] = useState(null);
   const [templates, setTemplates] = useState([]);
@@ -22,8 +22,7 @@ export function WorkProvider({ children }) {
   useEffect(() => {
     listSites().then((s) => {
       setSites(s);
-      // Match Figma: the selected site is Cheviot Park (middle one).
-      setSite(s.find((x) => x.id === 'cheviot-2330') ?? s[0] ?? null);
+      setSite(s[0] ?? null);
     });
     listTemplates().then((t) => {
       setTemplates(t);

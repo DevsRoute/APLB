@@ -5,6 +5,7 @@ import PocSuperdoc from './pages/PocSuperdoc.jsx';
 import PocDocxtemplater from './pages/PocDocxtemplater.jsx';
 import PocPdf from './pages/PocPdf.jsx';
 import PocFidelity from './pages/PocFidelity.jsx';
+import PocDocxEditor from './pages/PocDocxEditor.jsx';
 
 export default function App() {
   return (
@@ -15,6 +16,7 @@ export default function App() {
       <Route path="/poc/docxtemplater" element={<PocDocxtemplater />} />
       <Route path="/poc/pdf" element={<PocPdf />} />
       <Route path="/poc/fidelity" element={<PocFidelity />} />
+      <Route path="/poc/docx-editor" element={<PocDocxEditor />} />
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );

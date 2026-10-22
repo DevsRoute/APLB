@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useRef } from 'react';
 import Sidebar from './Sidebar.jsx';
 import MiddlePanel from './MiddlePanel.jsx';
 import EditorPane from './EditorPane.jsx';
@@ -15,15 +15,18 @@ export default function Shell() {
 function Inner() {
   const { filled, site, setSavedLOIs } = useWork();
   const editorRef = useRef(null);
-  const [fontFamily, setFontFamily] = useState('Arial');
-  const [fontSizePx, setFontSizePx] = useState(16);
 
   async function handleExport() {
-    await editorRef.current?.exportDocx(`LOI - ${site?.name ?? 'draft'}.docx`);
+    const name = `LOI - ${site?.name ?? 'draft'}.docx`;
+    await editorRef.current?.exportDocx(name);
     setSavedLOIs((xs) => [
       { id: `loi-${Date.now()}`, name: site?.name ?? 'LOI', date: new Date().toISOString() },
       ...xs,
     ]);
+  }
+
+  function handleSend() {
+    alert('Send is a stub — would email to LL broker.');
   }
 
   return (
@@ -33,12 +36,8 @@ function Inner() {
       <EditorPane
         ref={editorRef}
         buffer={filled?.buffer ?? null}
-        fontFamily={fontFamily}
-        fontSizePx={fontSizePx}
-        onFont={setFontFamily}
-        onFontSize={setFontSizePx}
         onExport={handleExport}
-        onSend={() => alert('Send is a stub — would email to LL broker.')}
+        onSend={handleSend}
       />
     </div>
   );

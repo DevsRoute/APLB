@@ -7,9 +7,9 @@ import { autoMapFields, buildFillData } from '../lib/autoMapFields.js';
 import { fillDocx, blobToArrayBuffer } from '../lib/fillTemplate.js';
 import { renderDocx } from '../lib/docRenderer.js';
 
-// Proves the CTO's #1 concern: can we fill {placeholders} inside a real .docx
-// without Word's split-run XML breaking the fill or the formatting? Log on the
-// left, live preview of the filled file on the right.
+// POC 2 — proves we can fill [placeholders] inside a .docx without breaking
+// Word's internal XML. Log on the left shows what the parser + mapper did;
+// the right pane renders the filled result.
 export default function PocDocxtemplater() {
   const [log, setLog] = useState([]);
   const [filled, setFilled] = useState(null);
@@ -27,7 +27,7 @@ export default function PocDocxtemplater() {
         push(`• input: user file "${fileArg.name}" (${fileArg.size} bytes)`);
         ab = await fileArg.arrayBuffer();
       } else {
-        push('• input: DT Shopping Center LOI (real client template)');
+        push('• input: built-in sample template');
         ({ arrayBuffer: ab } = await fetchTemplate('dt-shopping-center'));
       }
 
@@ -47,14 +47,13 @@ export default function PocDocxtemplater() {
 
       const sites = await listSites();
       const site = sites[0];
-      push(`• site: ${site.id} (${site.city}, ${site.state})`);
+      push(`• site: ${site.id}`);
 
       const data = buildFillData(site, mapping);
       const blob = fillDocx(ab, data);
       push(`✓ filled → ${blob.size} byte .docx produced`);
       setFilled(blob);
 
-      // Render the filled file in the right pane.
       const filledAb = await blobToArrayBuffer(blob);
       await renderDocx(filledAb, previewRef.current);
       push('✓ rendered via docx-preview');
@@ -76,7 +75,7 @@ export default function PocDocxtemplater() {
       <header className="flex items-center justify-between border-b bg-white px-4 py-2">
         <div className="flex items-center gap-3">
           <Link to="/" className="text-sm text-slate-500 hover:underline">← home</Link>
-          <h1 className="text-sm font-semibold text-navy-900">POC 2 — docxtemplater placeholder fill</h1>
+          <h1 className="text-sm font-semibold text-slate-900">POC 2 — docxtemplater placeholder fill</h1>
         </div>
         <div className="flex items-center gap-2">
           <input
@@ -89,14 +88,14 @@ export default function PocDocxtemplater() {
           <button
             disabled={busy}
             onClick={() => run()}
-            className="rounded bg-navy-800 px-3 py-1 text-xs text-white hover:bg-navy-700 disabled:opacity-50"
+            className="rounded bg-slate-800 px-3 py-1 text-xs text-white hover:bg-slate-700 disabled:opacity-50"
           >
             Use built-in sample
           </button>
           {filled && (
             <button
               onClick={() => saveBlob(filled, 'filled.docx')}
-              className="rounded bg-accent px-3 py-1 text-xs text-white hover:opacity-90"
+              className="rounded bg-orange-500 px-3 py-1 text-xs text-white hover:bg-orange-600"
             >
               Download filled .docx
             </button>
@@ -112,7 +111,7 @@ export default function PocDocxtemplater() {
             Word, docxtemplater handles it — this is where that assumption gets tested.
           </p>
           <pre className="whitespace-pre-wrap text-[11px] leading-snug text-slate-800">
-            {log.join('\n') || '(output appears here — click "Use built-in sample" or pick a file)'}
+{log.join('\n') || '(output appears here — click "Use built-in sample" or pick a file)'}
           </pre>
         </aside>
 

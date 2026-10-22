@@ -1,4 +1,5 @@
 import StepFooter from '../StepFooter.jsx';
+import { Field, Input } from '../../../components/ui/index.js';
 
 const BLANKS = [
   'Attn Name',
@@ -25,13 +26,9 @@ export default function UnderscoresAndEdit() {
         <ul className="mt-[12px] space-y-[8px]">
           {BLANKS.map((label) => (
             <li key={label}>
-              <label className="block">
-                <span className="mb-[4px] block text-[12px] font-bold text-ap-text">{label}</span>
-                <input
-                  type="text"
-                  className="w-full rounded-[2px] border border-black/20 bg-white px-[8px] py-[6px] text-[12px] focus:border-ap-dark focus:outline-none"
-                />
-              </label>
+              <Field label={label}>
+                <Input type="text" />
+              </Field>
             </li>
           ))}
         </ul>

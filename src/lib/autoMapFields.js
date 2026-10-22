@@ -1,10 +1,8 @@
 import Fuse from 'fuse.js';
-import { FIELD_KEYS, SITE_FIELDS, normalizePlaceholderName } from '../data/siteFieldCatalog.js';
+import { FIELD_KEYS, normalizePlaceholderName } from '../data/siteFieldCatalog.js';
 
 const fuse = new Fuse(FIELD_KEYS, { threshold: 0.4, includeScore: true });
 
-// placeholders: array of raw placeholder names (e.g. "LL Broker", "Premises Address")
-// → { placeholderName: fieldKey | null }
 export function autoMapFields(placeholders) {
   const out = {};
   for (const p of placeholders) {
@@ -16,27 +14,22 @@ export function autoMapFields(placeholders) {
   return out;
 }
 
-// Build the data object passed to docxtemplater. Handles computed fields
-// (premises_address, loi_date) and leaves manual ones blank.
 export function buildFillData(site, mapping) {
   const data = {};
   for (const [placeholder, fieldKey] of Object.entries(mapping)) {
-    data[placeholder] = resolveField(site, fieldKey);
+    data[placeholder] = resolve(site, fieldKey);
   }
   return data;
 }
 
-function resolveField(site, fieldKey) {
+function resolve(site, fieldKey) {
   if (!fieldKey) return '';
-  if (fieldKey === 'loi_date') {
+  if (fieldKey === 'today' || fieldKey === 'loi_date') {
     return new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
   }
   if (fieldKey === 'premises_address') {
     if (!site) return '';
-    const parts = [site.street, site.city, site.state].filter(Boolean);
-    return parts.join(', ');
+    return [site.street, site.city, site.state].filter(Boolean).join(', ');
   }
-  const field = SITE_FIELDS.find((f) => f.key === fieldKey);
-  if (field?.source === 'manual') return site?.[fieldKey] ?? '';
   return site?.[fieldKey] ?? '';
 }

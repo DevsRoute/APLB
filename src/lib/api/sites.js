@@ -1,4 +1,3 @@
-// Backend-swap seam. Today: static JSON. Later: fetch('/api/sites').
 import sites from '../../data/sites.json';
 
 export async function listSites() {

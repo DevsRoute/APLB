@@ -1,45 +1,53 @@
-// Optional-language blocks per template. Each block has a question, a list of
-// options, and the text each option would drop into the LOI.
 export const OPTIONAL_LANGUAGE = [
-  {
-    id: 'existing-tenant',
-    heading: 'Existing Tenant in Premises',
-    options: [
-      {
-        id: 'no',
-        title: 'No existing Tenant',
-        hint: 'Use this when Premises have no Tenant',
-        text: 'No',
-      },
-      {
-        id: 'has',
-        title: 'Has Existing Tenant',
-        hint: 'Use this when Premises have an existing Tenant',
-        text: 'Yes; lease expires on ______; or upon notice to vacate within ____ days',
-      },
-    ],
-  },
   {
     id: 'additional-rent',
     heading: 'Additional Rent',
     options: [
       {
-        id: 'cam-cap',
-        title: 'Use for Triple Net Leases without Admin Fee',
-        hint: 'Tenant to contribute its proportionate share of real estate taxes, insurance costs, and common area maintenance expenses.',
-        text: 'Tenant shall pay its pro-rata share of Taxes, Insurance and CAM (collectively, "Additional Rent"). CAM Caps for the first full calendar year shall not exceed $__/sqft, with an annual cap on controllable CAM increases of __% uncompounded over the previous year’s base.',
+        id: 'triple-net',
+        title: 'Use for Triple Net Lease without Admin Fee',
+        hint: 'Has CAM Cap',
+        text:
+          'CAM Costs:  Tenant to reimburse Landlord for its proportionate share of CAM Costs, not to exceed $_____ per square foot in the first full calendar year.  CAM Costs shall not include any insurance costs, real estate taxes, administrative or management costs, capital expenditures, reserves, or other costs not related to the operation, maintenance, or repair of the common areas.\n\nReal Estate Taxes:  Tenant to pay its proportionate share of Real Estate Taxes, not to exceed $________ per square foot in the first full calendar year.\n\nProperty Insurance:  Tenant to pay its proportionate share of Property Insurance, not to exceed $________ per square foot in the first full calendar year.',
       },
       {
-        id: 'cam-with-admin',
+        id: 'gross-rent',
         title: 'Use for Gross Rent',
-        hint: 'For Gross-rent arrangements where all expenses are included in base rent.',
-        text: 'Rent is "gross" and inclusive of taxes, insurance, and CAM. Landlord is solely responsible for all property-level operating expenses.',
+        hint: 'No CAM Cap',
+        text:
+          'Landlord to be responsible for the payment of all costs related to the operation, maintenance, and repair of the Shopping Center, including real estate taxes and insurance, without reimbursement from Tenant other than payment of Gross Rent.',
       },
       {
-        id: 'cam-modified',
-        title: 'Use for Modified Gross — Use for Modified Gross Rent',
-        hint: 'A hybrid structure. The base year is agreed and increases over the base year are shared.',
-        text: 'Base Year is the first full calendar year of the Term. Tenant shall pay its proportionate share of any increase in Taxes, Insurance and CAM above the Base Year amount.',
+        id: 'modified-gross-cam',
+        title: 'Use for Modified Gross Rent — CAM Cap',
+        hint: 'Tax Increases Only',
+        text:
+          'Landlord to be responsible for the payment of all costs related to the operation, maintenance, and repair of the Shopping Center, including real estate taxes and insurance. Tenant to reimburse Landlord only for the amount by which real estate taxes increase above the Base Year. If substantially all improvements in the Shopping Center are completed and assessed, the “Base Year” shall be the 12-month tax period in which the Rent Commencement Date occurs. If the Shopping Center is recently constructed or substantially improved, the “Base Year” shall be the first 12-month tax period for which the real estate tax assessment is based on the completed improvements.',
+      },
+      {
+        id: 'modified-gross-tax',
+        title: 'Use for Modified Gross Rent — Tax Increases Only',
+        hint: 'CAM Cap',
+        text:
+          'Landlord to be responsible for the payment of all costs related to the operation, maintenance, and repair of the Shopping Center, including real estate taxes and insurance. Tenant to reimburse Landlord only for the amount by which real estate taxes increase above the Base Year.',
+      },
+    ],
+  },
+  {
+    id: 'existing-tenant',
+    heading: 'Existing Tenant in Premises',
+    options: [
+      {
+        id: 'none',
+        title: 'No existing Tenant',
+        hint: 'Use when the Premises have no Tenant',
+        text: 'No',
+      },
+      {
+        id: 'has',
+        title: 'Has Existing Tenant',
+        hint: 'Use when the Premises have an existing Tenant',
+        text: 'Yes; lease expires on ______; or upon notice to vacate within ____ days',
       },
     ],
   },
@@ -50,13 +58,13 @@ export const OPTIONAL_LANGUAGE = [
       {
         id: 'none',
         title: 'No CAM Cap',
-        hint: 'No cap language is inserted.',
+        hint: 'No cap language is inserted',
         text: '',
       },
       {
         id: 'cumulative',
         title: 'Cumulative',
-        hint: 'Caps are cumulative year over year.',
+        hint: 'Caps are cumulative year over year',
         text: 'Any under-cap in a given year shall be carried forward for use in subsequent years, cumulatively.',
       },
     ],
