@@ -1,15 +1,15 @@
 const TEMPLATES = [
   {
-    id: 'dt-shopping-center',
-    name: 'DT Shopping Center LOI (default)',
-    updated: 'Jul 7, 2025',
-    url: '/templates/dt-shopping-center.docx',
+    id: 'loi-apst-latest',
+    name: 'DT Shopping Center LOI APST (latest)',
+    updated: 'Oct 24, 2026',
+    url: '/templates/dt-apst-latest.docx',
   },
   {
-    id: 'sample-loi',
-    name: 'Minimal sample LOI',
-    updated: new Date().toISOString().slice(0, 10),
-    url: '/templates/sample-loi.docx',
+    id: 'loi-shopping-center',
+    name: 'LOI - shopping center',
+    updated: 'Oct 10, 2025',
+    url: '/templates/dt-shopping-center.docx',
   },
 ];
 

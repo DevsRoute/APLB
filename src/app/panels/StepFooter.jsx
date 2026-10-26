@@ -3,7 +3,7 @@ import { useWork } from '../WorkContext.jsx';
 export default function StepFooter({ prev, next, rightLabel }) {
   const { setStep } = useWork();
   return (
-    <footer className="border-t border-black/10 px-[21px] py-[11px]">
+    <footer className="border-t border-black/15 px-[26px] py-[11px]">
       <div className="flex items-center justify-between text-[12px] font-bold text-ap-text2">
         {prev ? (
           <button onClick={() => setStep(prev.key)} className="hover:underline">

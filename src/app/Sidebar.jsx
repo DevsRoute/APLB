@@ -8,10 +8,11 @@ const DRAFT = {
   title: 'Draft LOI',
   subtitle: 'Manage LOIs',
   steps: [
-    { key: 'link',     label: 'Link Site' },
-    { key: 'template', label: 'Choose Template' },
-    { key: 'language', label: 'Add Optional Language' },
-    { key: 'edit',     label: 'Underscores and Edit' },
+    { key: 'link',      label: 'Link Site' },
+    { key: 'template',  label: 'Choose Template' },
+    { key: 'fill-data', label: 'Fill Template Data' },
+    { key: 'language',  label: 'Add Optional Language' },
+    { key: 'edit',      label: 'Underscores and Edit' },
   ],
 };
 
