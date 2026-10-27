@@ -328,26 +328,27 @@ export const OPTIONAL_LANGUAGE = [
         "id": "option_6",
         "label": "Option 6. Ongoing Option #4 (named co-tenant or % of total GLA or minimum square footage)",
         "bodyParagraphs": [
-          "Either (a) ____________________ or a suitable replacement tenant (as further defined in the Lease) occupying at least ninety percent (90%) of the square footage currently occupied by _________________ in the Shopping Center is open for business to the public in its current premises as identified on the Site Plan or (b) tenants operating retail businesses are open for business to the public for retail uses in not less than ________________ square feet in the Shopping Center/__% of Shopping Center GLA]. Premises GLA shall be included for purposes of determining whether the required occupancy has been satisfied.",
-          "Co-Tenancy B>",
-          "<Co-Tenancy A>",
-          "None",
-          "If user selection for <Co-Tenancy A> == OR OR OR THEN",
-          "offer the following options:"
+          "Either (a) ____________________ or a suitable replacement tenant (as further defined in the Lease) occupying at least ninety percent (90%) of the square footage currently occupied by _________________ in the Shopping Center is open for business to the public in its current premises as identified on the Site Plan or (b) tenants operating retail businesses are open for business to the public for retail uses in not less than ________________ square feet in the Shopping Center/__% of Shopping Center GLA]. Premises GLA shall be included for purposes of determining whether the required occupancy has been satisfied."
         ],
         "default": false
-      },
+      }
+    ]
+  },
+  {
+    "id": "co_tenancy_b",
+    "heading": "Co-Tenancy B",
+    "options": [
       {
-        "id": "option_7",
-        "label": "Option 7. None",
+        "id": "option_1",
+        "label": "Option 1. None",
         "bodyParagraphs": [
           "None"
         ],
         "default": false
       },
       {
-        "id": "option_8",
-        "label": "Option 8. Default language for any “ongoing language”",
+        "id": "option_2",
+        "label": "Option 2. Default language for any “ongoing language”",
         "bodyParagraphs": [
           "At any time when this “Ongoing Co-Tenancy Requirement” is not satisfied, Tenant will pay Alternate Rent equal to 1% of gross sales, not to exceed 50% of Base Rent. If the Ongoing Co-Tenancy Requirement remains unsatisfied until the later of (a) 6 months following the date when the Ongoing Co-Tenancy Requirement first failed to be satisfied or (b) 6 months following the date when Tenant had actual notice at the address specified in the Lease that the Ongoing Co-Tenancy Requirement was no longer satisfied, Tenant will have the ongoing right to terminate the Lease. .]"
         ],

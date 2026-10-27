@@ -40,6 +40,32 @@ export const CLAUSE_LINKS = {
       reactive: { clause: 'cam_cap', option: 'option_1' },
     },
   },
+  // Co-Tenancy B is conditional on Co-Tenancy A per the library's yellow prose:
+  //   - A/Option 1 (no co-tenancy)         → auto B/Option 1 (None)
+  //   - A/Option 3..6 (any Ongoing)        → filter B to [Option 1, Option 2]
+  //   - A/Option 2 (Opening / brand-new)   → no rule; user picks B manually
+  co_tenancy_a: {
+    option_1: {
+      mode: 'auto',
+      reactive: { clause: 'co_tenancy_b', option: 'option_1' },
+    },
+    option_3: {
+      mode: 'filter',
+      reactive: { clause: 'co_tenancy_b', options: ['option_1', 'option_2'] },
+    },
+    option_4: {
+      mode: 'filter',
+      reactive: { clause: 'co_tenancy_b', options: ['option_1', 'option_2'] },
+    },
+    option_5: {
+      mode: 'filter',
+      reactive: { clause: 'co_tenancy_b', options: ['option_1', 'option_2'] },
+    },
+    option_6: {
+      mode: 'filter',
+      reactive: { clause: 'co_tenancy_b', options: ['option_1', 'option_2'] },
+    },
+  },
 };
 
 export function resolveLink(clauseId, optionId) {
