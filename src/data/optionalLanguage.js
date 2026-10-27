@@ -229,6 +229,28 @@ export const OPTIONAL_LANGUAGE = [
     ]
   },
   {
+    "id": "landlord_s_work",
+    "heading": "Landlord’s Work",
+    "options": [
+      {
+        "id": "option_1",
+        "label": "Option 1. No Landlord’s Work",
+        "bodyParagraphs": [
+          "None"
+        ],
+        "default": false
+      },
+      {
+        "id": "option_2",
+        "label": "Option 2. With Landlord’s Work",
+        "bodyParagraphs": [
+          "The work described on Exhibit C attached hereto to be completed by Landlord prior to the Anticipated Delivery Date, and as a condition to delivery, at Landlord’s sole cost and expense."
+        ],
+        "default": false
+      }
+    ]
+  },
+  {
     "id": "hvac",
     "heading": "HVAC",
     "options": [
