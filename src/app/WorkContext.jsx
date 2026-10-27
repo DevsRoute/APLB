@@ -34,7 +34,7 @@ export function WorkProvider({ children }) {
     });
     listTemplates().then((t) => {
       setTemplates(t);
-      setTemplate(t.find((x) => x.id === 'loi-apst-latest') ?? t[0] ?? null);
+      setTemplate(t.find((x) => x.id === 'baohouse-apst-v2') ?? t[0] ?? null);
     });
   }, []);
 

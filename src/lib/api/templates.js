@@ -1,15 +1,9 @@
 const TEMPLATES = [
   {
-    id: 'loi-apst-latest',
-    name: 'DT Shopping Center LOI APST (latest)',
-    updated: 'Oct 24, 2026',
-    url: '/templates/dt-apst-latest.docx',
-  },
-  {
-    id: 'loi-shopping-center',
-    name: 'LOI - shopping center',
-    updated: 'Oct 10, 2025',
-    url: '/templates/dt-shopping-center.docx',
+    id: 'baohouse-apst-v2',
+    name: 'Baohouse Shopping Center LOI APST (v2)',
+    updated: 'Oct 27, 2026',
+    url: '/templates/baohouse-apst-v2.docx',
   },
 ];
 
