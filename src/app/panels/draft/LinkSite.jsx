@@ -52,7 +52,7 @@ export default function LinkSite() {
       <footer className="border-t border-black/15 px-[26px] py-[11px] text-right">
         <button
           onClick={() => setStep('template')}
-          className="text-[12px] font-bold text-ap-text2 hover:underline"
+          className="text-[16px] font-bold leading-[16px] text-ap-text2 hover:underline"
         >
           Link Site and Draft LOI &gt;
         </button>

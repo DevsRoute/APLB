@@ -6,7 +6,7 @@ export default function AddOptionalLanguage() {
     <>
       <OptionalLanguageList />
       <StepFooter
-        prev={{ key: 'fill-data', label: 'Fill Template Data' }}
+        prev={{ key: 'template', label: 'Choose Template' }}
         next={{ key: 'edit', label: 'Underscores and Edit' }}
       />
     </>

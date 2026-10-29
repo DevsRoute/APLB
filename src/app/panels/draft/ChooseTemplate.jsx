@@ -61,7 +61,7 @@ export default function ChooseTemplate() {
 
       <StepFooter
         prev={{ key: 'link', label: 'Link Site' }}
-        next={{ key: 'fill-data', label: 'Fill Template Data' }}
+        next={{ key: 'language', label: 'Add Optional Language' }}
         rightLabel="Select"
       />
     </>
