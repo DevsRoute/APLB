@@ -8,7 +8,7 @@ import { fillOptionalLanguage } from '../lib/fillOptionalLanguage.js';
 
 const Ctx = createContext(null);
 
-const FILL_ON_STEPS = new Set(['language', 'edit']);
+const FILL_ON_STEPS = new Set(['language']);
 
 export function WorkProvider({ children }) {
   const [mode, setMode] = useState('draft');

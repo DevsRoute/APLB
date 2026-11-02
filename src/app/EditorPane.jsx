@@ -66,6 +66,8 @@ const EditorPane = forwardRef(function EditorPane(
             document={docBytes}
             mode="edit"
             fonts={fonts}
+            title=""
+            menu={false}
           />
         )}
       </div>

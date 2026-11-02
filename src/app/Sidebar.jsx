@@ -1,7 +1,12 @@
 import clsx from 'clsx';
 import { useState } from 'react';
 import { useWork } from './WorkContext.jsx';
+import { useResizableWidth, ResizeHandle } from './useResizableWidth.jsx';
 import { Chevron } from '../components/ui/index.js';
+
+const DEFAULT_WIDTH = 199;
+const MIN_WIDTH = 160;
+const MAX_WIDTH = 400;
 
 const DRAFT = {
   key: 'draft',
@@ -9,9 +14,8 @@ const DRAFT = {
   subtitle: 'Manage LOIs',
   steps: [
     { key: 'link',     label: 'Link Site' },
-    { key: 'template', label: 'Choose Template' },
-    { key: 'language', label: 'Add Optional Language' },
-    { key: 'edit',     label: 'Underscores and Edit' },
+    { key: 'template', label: 'Template' },
+    { key: 'language', label: 'Opt Language' },
   ],
 };
 
@@ -30,6 +34,11 @@ export default function Sidebar() {
   const { mode, step, setMode, setStep } = useWork();
   const [draftOpen, setDraftOpen] = useState(true);
   const [buildOpen, setBuildOpen] = useState(false);
+  const [width, onResizeStart] = useResizableWidth({
+    initial: DEFAULT_WIDTH,
+    min: MIN_WIDTH,
+    max: MAX_WIDTH,
+  });
 
   function pickStep(newMode, newStep) {
     setMode(newMode);
@@ -46,7 +55,10 @@ export default function Sidebar() {
   );
 
   return (
-    <aside className="flex w-[199px] shrink-0 flex-col bg-ap-mid">
+    <aside
+      className="relative flex shrink-0 flex-col bg-ap-mid"
+      style={{ width: `${width}px` }}
+    >
       <SectionHeader
         section={DRAFT}
         open={draftOpen}
@@ -75,6 +87,7 @@ export default function Sidebar() {
       )}
       {!buildOpen && buildHeader}
       */}
+      <ResizeHandle onMouseDown={onResizeStart} />
     </aside>
   );
 }

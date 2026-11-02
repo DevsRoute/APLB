@@ -48,7 +48,7 @@ export default function ChooseTemplate() {
                     selected ? 'bg-ap-dark text-white' : 'text-ap-text2 hover:bg-black/5',
                   )}
                 >
-                  <div className="text-[12px] font-bold leading-[16px]">{t.name}</div>
+                  <div className="text-[12px] leading-[16px]">{t.name}</div>
                   <div className="text-[10px] font-normal leading-[14px] opacity-90">
                     last updated {t.updated}
                   </div>
@@ -61,8 +61,8 @@ export default function ChooseTemplate() {
 
       <StepFooter
         prev={{ key: 'link', label: 'Link Site' }}
-        next={{ key: 'language', label: 'Add Optional Language' }}
-        rightLabel="Select"
+        next={{ key: 'language', label: 'Opt Language' }}
+        rightLabel="Select and Fill Data"
       />
     </>
   );

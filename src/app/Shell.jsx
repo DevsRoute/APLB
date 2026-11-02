@@ -19,7 +19,7 @@ function Inner() {
   const editorVisible = step !== 'link';
   const buffer = filled?.buffer ?? templateBuffer ?? null;
   const toolbarVisible = filled !== null;
-  const underscoreNavVisible = step === 'edit';
+  const underscoreNavVisible = step === 'language';
 
   async function handleExport() {
     const name = `LOI - ${site?.name ?? 'draft'}.docx`;
