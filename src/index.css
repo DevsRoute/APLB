@@ -35,3 +35,7 @@ body {
   background-clip: padding-box;
 }
 .ap-scroll::-webkit-scrollbar-track { background: transparent; }
+
+/* Eigenpal doesn't accept hidden on named parts unless we switch to DocxEditor.Root
+   compound (big refactor). CSS-hide the "Editing" mode pill via its slot id. */
+[data-slot="review.editingMode"] { display: none !important; }

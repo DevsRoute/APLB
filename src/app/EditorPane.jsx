@@ -2,6 +2,8 @@ import { forwardRef, useImperativeHandle, useMemo, useRef, useState } from 'reac
 import { DocxEditor } from '@docx-editor.dev/react';
 import { packagedFonts } from '@docx-editor.dev/fonts';
 import '@docx-editor.dev/core/styles/editor.css';
+import { useWork } from './WorkContext.jsx';
+import { OPTIONAL_LANGUAGE } from '../data/optionalLanguage.js';
 
 const DOCX_MIME =
   'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
@@ -16,6 +18,25 @@ const EditorPane = forwardRef(function EditorPane(
   const editorRef = useRef(null);
   const docBytes = useMemo(() => (buffer ? new Uint8Array(buffer) : null), [buffer]);
   const [blankIndex, setBlankIndex] = useState(-1);
+  const { setFocusedClauseId } = useWork();
+
+  function handleClickCapture(e) {
+    const range = document.caretRangeFromPoint?.(e.clientX, e.clientY);
+    const start = range?.startContainer ?? e.target;
+    let el = start?.nodeType === Node.TEXT_NODE ? start.parentElement : start;
+    // Walk up from click; first ancestor containing any <Clause Heading> wins.
+    // Deepest scope = the specific run/span, so this stays accurate per click.
+    while (el && el.tagName !== 'BODY') {
+      const text = el.textContent ?? '';
+      for (const c of OPTIONAL_LANGUAGE) {
+        if (text.includes(`<${c.heading}>`)) {
+          setFocusedClauseId(c.id);
+          return;
+        }
+      }
+      el = el.parentElement;
+    }
+  }
 
   useImperativeHandle(ref, () => ({
     async exportDocx(filename = 'loi.docx') {
@@ -58,7 +79,7 @@ const EditorPane = forwardRef(function EditorPane(
           )}
         </div>
       )}
-      <div className="min-h-0 flex-1">
+      <div className="min-h-0 flex-1" onClickCapture={handleClickCapture}>
         {docBytes && (
           <DocxEditor
             key={buffer}

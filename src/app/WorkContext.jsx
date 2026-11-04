@@ -20,6 +20,7 @@ export function WorkProvider({ children }) {
   const [templateBuffer, setTemplateBuffer] = useState(null);
   const [filled, setFilled] = useState(null);
   const [chosenLanguage, setChosenLanguage] = useState({});
+  const [focusedClauseId, setFocusedClauseId] = useState(null);
   const [savedLOIs, setSavedLOIs] = useState([]);
   const [sentLOIs, setSentLOIs] = useState([]);
 
@@ -95,9 +96,10 @@ export function WorkProvider({ children }) {
     filled,
     runFill,
     chosenLanguage, setChosenLanguage,
+    focusedClauseId, setFocusedClauseId,
     savedLOIs, setSavedLOIs,
     sentLOIs, setSentLOIs,
-  }), [mode, step, sites, site, templates, template, templateBuffer, filled, runFill, chosenLanguage, savedLOIs, sentLOIs]);
+  }), [mode, step, sites, site, templates, template, templateBuffer, filled, runFill, chosenLanguage, focusedClauseId, savedLOIs, sentLOIs]);
 
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;
 }

@@ -5,8 +5,12 @@ import { OPTIONAL_LANGUAGE } from '../../../data/optionalLanguage.js';
 import { CLAUSE_LINKS, resolveLink, activeFiltersFor } from '../../../data/clauseLinks.js';
 
 export default function OptionalLanguageList() {
-  const { chosenLanguage, setChosenLanguage } = useWork();
+  const { chosenLanguage, setChosenLanguage, focusedClauseId, setFocusedClauseId } = useWork();
   const [staged, setStaged] = useState({});
+  const visibleIds = focusedClauseId ? linkedClauseIds(focusedClauseId) : null;
+  const clauses = visibleIds
+    ? OPTIONAL_LANGUAGE.filter((c) => visibleIds.has(c.id))
+    : OPTIONAL_LANGUAGE;
 
   function stage(clauseId, optionId) {
     const next = { ...staged, [clauseId]: optionId };
@@ -28,7 +32,21 @@ export default function OptionalLanguageList() {
 
   return (
     <div className="ap-scroll flex-1 overflow-auto">
-      {OPTIONAL_LANGUAGE.map((clause) => {
+      {focusedClauseId && (
+        <div className="flex items-center justify-between border-b border-black/10 bg-white/50 px-[21px] py-[8px] text-[12px]">
+          <span className="text-ap-text/80">
+            Focused: <span className="font-bold text-ap-text">{clauseName(focusedClauseId)}</span>
+          </span>
+          <button
+            type="button"
+            onClick={() => setFocusedClauseId(null)}
+            className="font-bold text-[#f5a623] hover:underline"
+          >
+            Show all
+          </button>
+        </div>
+      )}
+      {clauses.map((clause) => {
         const filters = activeFiltersFor(clause.id, chosenLanguage);
         const allowed = filters.length === 0
           ? clause.options
@@ -152,6 +170,18 @@ function firstSentence(s) {
 function clauseName(id) {
   const c = OPTIONAL_LANGUAGE.find((x) => x.id === id);
   return c?.heading ?? id;
+}
+
+// Union of {focused} + any clauses linked to/from it (either direction).
+function linkedClauseIds(focusedId) {
+  const ids = new Set([focusedId]);
+  for (const [proId, perOption] of Object.entries(CLAUSE_LINKS)) {
+    for (const link of Object.values(perOption)) {
+      if (proId === focusedId) ids.add(link.reactive.clause);
+      else if (link.reactive.clause === focusedId) ids.add(proId);
+    }
+  }
+  return ids;
 }
 
 function findAutoSource(reactiveClauseId, selectedOptionId, chosenLanguage) {
