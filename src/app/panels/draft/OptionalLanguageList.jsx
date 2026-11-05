@@ -33,14 +33,11 @@ export default function OptionalLanguageList() {
   return (
     <div className="ap-scroll flex-1 overflow-auto">
       {focusedClauseId && (
-        <div className="flex items-center justify-between border-b border-black/10 bg-white/50 px-[21px] py-[8px] text-[12px]">
-          <span className="text-ap-text/80">
-            Focused: <span className="font-bold text-ap-text">{clauseName(focusedClauseId)}</span>
-          </span>
+        <div className="border-b border-black/10 bg-white/50 px-[21px] py-[8px]">
           <button
             type="button"
             onClick={() => setFocusedClauseId(null)}
-            className="font-bold text-[#f5a623] hover:underline"
+            className="text-[12px] font-bold text-ap-text hover:underline"
           >
             Show all
           </button>
@@ -128,6 +125,14 @@ function OptionRow({ opt, staged, committed, autoFrom, onStage, onCommit }) {
           )}
           {committed && <Badge dark label="✓ IN LOI" />}
         </div>
+        {opt.comment && (
+          <div className={clsx(
+            'mt-[4px] text-[13px] font-bold leading-[16px]',
+            highlighted ? 'text-white' : 'text-ap-text',
+          )}>
+            ({opt.comment})
+          </div>
+        )}
         {preview && (
           <div className={clsx(
             'mt-[6px] whitespace-pre-wrap text-[12px] leading-[16px]',

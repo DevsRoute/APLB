@@ -1,4 +1,4 @@
-import { forwardRef, useImperativeHandle, useMemo, useRef, useState } from 'react';
+import { forwardRef, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
 import { DocxEditor } from '@docx-editor.dev/react';
 import { packagedFonts } from '@docx-editor.dev/fonts';
 import '@docx-editor.dev/core/styles/editor.css';
@@ -18,25 +18,53 @@ const EditorPane = forwardRef(function EditorPane(
   const editorRef = useRef(null);
   const docBytes = useMemo(() => (buffer ? new Uint8Array(buffer) : null), [buffer]);
   const [blankIndex, setBlankIndex] = useState(-1);
-  const { setFocusedClauseId } = useWork();
+  const { focusedClauseId, setFocusedClauseId } = useWork();
+  const highlightedElRef = useRef(null);
+
+  function paintFocused(hostEl) {
+    // Revert the previous wrapper by unwrapping.
+    const prev = highlightedElRef.current;
+    if (prev && prev.parentNode) {
+      const parent = prev.parentNode;
+      while (prev.firstChild) parent.insertBefore(prev.firstChild, prev);
+      parent.removeChild(prev);
+    }
+    highlightedElRef.current = null;
+    if (!hostEl) return;
+    const span = document.createElement('span');
+    span.className = 'aplb-focused-clause';
+    while (hostEl.firstChild) span.appendChild(hostEl.firstChild);
+    hostEl.appendChild(span);
+    highlightedElRef.current = span;
+  }
 
   function handleClickCapture(e) {
     const range = document.caretRangeFromPoint?.(e.clientX, e.clientY);
-    const start = range?.startContainer ?? e.target;
-    let el = start?.nodeType === Node.TEXT_NODE ? start.parentElement : start;
-    // Walk up from click; first ancestor containing any <Clause Heading> wins.
-    // Deepest scope = the specific run/span, so this stays accurate per click.
-    while (el && el.tagName !== 'BODY') {
-      const text = el.textContent ?? '';
+    const start = range?.startContainer;
+    // Only act when the click actually landed on text — a click on empty cell
+    // space returns an element here and would wrap the whole cell.
+    if (start?.nodeType !== Node.TEXT_NODE) return;
+    let el = start.parentElement;
+    // Only trigger when we find a tight wrapper whose textContent is exactly the
+    // clause tag — clicks on other text (e.g. cyan [placeholders]) must not focus.
+    let node = el;
+    while (node && node.tagName !== 'BODY') {
+      const t = (node.textContent ?? '').trim();
       for (const c of OPTIONAL_LANGUAGE) {
-        if (text.includes(`<${c.heading}>`)) {
+        if (t === `<${c.heading}>`) {
+          paintFocused(node);
           setFocusedClauseId(c.id);
           return;
         }
       }
-      el = el.parentElement;
+      node = node.parentElement;
     }
   }
+
+  // Revert the pink paint when the filter is cleared (Show All).
+  useEffect(() => {
+    if (!focusedClauseId) paintFocused(null);
+  }, [focusedClauseId]);
 
   useImperativeHandle(ref, () => ({
     async exportDocx(filename = 'loi.docx') {
