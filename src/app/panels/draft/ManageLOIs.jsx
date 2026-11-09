@@ -37,7 +37,7 @@ function Column({ title, items, tone }) {
               )}
             >
               <LoiIcon tone={tone} />
-              <span className="text-[12px] font-bold leading-[16px]">{it.name}</span>
+              <span className="text-[13px] leading-[18px]">{it.name}</span>
             </button>
           </li>
         ))}

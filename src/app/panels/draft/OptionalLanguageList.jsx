@@ -127,10 +127,10 @@ function OptionRow({ opt, staged, committed, autoFrom, onStage, onCommit }) {
         </div>
         {opt.comment && (
           <div className={clsx(
-            'mt-[4px] text-[13px] font-bold leading-[16px]',
+            'mt-[4px] text-[10px] font-bold leading-[13px]',
             highlighted ? 'text-white' : 'text-ap-text',
           )}>
-            ({opt.comment})
+            {opt.comment}
           </div>
         )}
         {preview && (

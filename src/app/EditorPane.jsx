@@ -16,6 +16,7 @@ const EditorPane = forwardRef(function EditorPane(
   ref,
 ) {
   const editorRef = useRef(null);
+  const paneRef = useRef(null);
   const docBytes = useMemo(() => (buffer ? new Uint8Array(buffer) : null), [buffer]);
   const [blankIndex, setBlankIndex] = useState(-1);
   const { focusedClauseId, setFocusedClauseId } = useWork();
@@ -66,6 +67,33 @@ const EditorPane = forwardRef(function EditorPane(
     if (!focusedClauseId) paintFocused(null);
   }, [focusedClauseId]);
 
+  // shortcut: polls for the library-owned DOM nodes after mount; upgrade if
+  // eigenpal exposes a verticalRuler follow prop. Pin the vertical ruler to
+  // the viewport so it tracks the scrolled page instead of staying on page 1.
+  useEffect(() => {
+    if (!docBytes) return undefined;
+    const pane = paneRef.current;
+    if (!pane) return undefined;
+    let scrollEl = null;
+    let wrapEl = null;
+    const update = () => {
+      if (scrollEl && wrapEl) wrapEl.style.top = `${scrollEl.scrollTop}px`;
+    };
+    const attachId = setInterval(() => {
+      scrollEl = pane.querySelector('.docx-editor__scroll-container');
+      wrapEl = scrollEl?.querySelector('.docx-vertical-ruler')?.parentElement ?? null;
+      if (scrollEl && wrapEl) {
+        clearInterval(attachId);
+        scrollEl.addEventListener('scroll', update, { passive: true });
+        update();
+      }
+    }, 100);
+    return () => {
+      clearInterval(attachId);
+      scrollEl?.removeEventListener('scroll', update);
+    };
+  }, [docBytes]);
+
   useImperativeHandle(ref, () => ({
     async exportDocx(filename = 'loi.docx') {
       const bytes = await editorRef.current?.save();
@@ -90,7 +118,7 @@ const EditorPane = forwardRef(function EditorPane(
   }
 
   return (
-    <section className="flex min-w-0 flex-1 flex-col bg-white">
+    <section ref={paneRef} className="flex min-w-0 flex-1 flex-col bg-white">
       {(showToolbar || showUnderscoreNav) && (
         <div className="flex items-center justify-end gap-5 border-b border-black/10 bg-white px-5 py-2 text-[12px] font-bold text-ap-text">
           {showUnderscoreNav && (
