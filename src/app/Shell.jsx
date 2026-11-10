@@ -37,7 +37,6 @@ function Inner() {
   return (
     <div className="relative flex h-full min-h-0 flex-col">
       <TopHeader />
-      <div className="pointer-events-none absolute left-0 right-0 top-[65px] z-30 h-[16px] bg-gradient-to-b from-black/25 to-transparent" />
       <div className="flex min-h-0 flex-1">
         <Sidebar />
         <MiddlePanel />

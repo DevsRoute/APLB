@@ -139,7 +139,7 @@ function StepList({ steps, current, onPick }) {
             <button
               onClick={() => onPick(s.key)}
               className={clsx(
-                'block w-full px-[42px] py-[9px] text-left text-[12px] font-bold leading-[16px]',
+                'block w-full px-[42px] py-[9px] text-left text-[16px] font-bold leading-[16px]',
                 selected ? 'bg-ap-light text-ap-text' : 'text-ap-text2 hover:bg-ap-light/60',
               )}
             >

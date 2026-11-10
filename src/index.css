@@ -35,6 +35,11 @@ body {
   background-clip: padding-box;
 }
 .ap-scroll::-webkit-scrollbar-track { background: transparent; }
+/* Let panel body hug its content so StepFooter sits right under the last
+   item (instead of being pushed to the bottom of the panel). Still shrinks
+   + scrolls when content exceeds panel height. */
+.ap-scroll { flex: 0 1 auto !important; min-height: 0; }
+.ap-scroll + footer { flex-shrink: 0; }
 
 /* Eigenpal doesn't accept hidden on named parts unless we switch to DocxEditor.Root
    compound (big refactor). CSS-hide the "Editing" mode pill via its slot id. */

@@ -1,6 +1,6 @@
 export default function TopHeader() {
   return (
-    <header className="flex h-[65px] shrink-0 bg-white">
+    <header className="relative z-[120] flex h-[65px] shrink-0 bg-white shadow-[0_6px_10px_-4px_rgba(0,0,0,0.28)]">
       <div className="flex w-[234px] shrink-0 flex-col justify-center px-[23px]">
         <img
           src="/abstrapoint-logo.svg"
